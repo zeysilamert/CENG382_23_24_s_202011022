@@ -1,0 +1,76 @@
+body{
+    font-family: "Montserrat", "consolas", "sans-serif";
+    background-color: rgb(255, 255, 255);
+}
+
+h3{
+    text-align: center;
+}
+
+.Login{
+    background-color:rgb(255, 237, 235);
+    margin: 0 auto;
+    padding: 20px;
+    width: 300px;
+}
+
+.Login input{
+    width: 95%;
+    padding: 5px;
+    margin: 5px 0;
+    border-color:rgb(83, 51, 56);
+    border-radius: 5px;
+    border-style: solid;
+}
+
+#buttonLog{
+    background-color:rgb(240, 204, 210);
+    padding: 5px;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.Register{
+    background-color:rgb(255, 237, 235);
+    margin: 0 auto;
+    padding: 20px;
+    width: 300px;
+}
+
+.Register input{
+    width: 95%;
+    padding: 5px;
+    margin: 5px 0;
+    border-color:rgb(83, 51, 56);
+    border-radius: 5px;
+    border-style: solid;
+}
+
+#buttonReg{
+    background-color:rgb(240, 204, 210);
+    padding: 5px;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid rgb(83, 51, 56);
+    text-align: left;
+}
+
+th {
+    background-color: rgb(241, 227, 227);
+}
+
+tr:nth-child(even) {
+    background-color: rgb(240, 204, 210);;
+}
