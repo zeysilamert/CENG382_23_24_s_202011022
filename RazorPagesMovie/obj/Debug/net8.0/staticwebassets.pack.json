@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets/js/color-modes.js"
     },
     {
+      "Id": "/Users/sila/Desktop/CENG382_23_24_s_202011022/RazorPagesMovie/wwwroot/js/script.js",
+      "PackagePath": "staticwebassets/js/script.js"
+    },
+    {
       "Id": "/Users/sila/Desktop/CENG382_23_24_s_202011022/RazorPagesMovie/wwwroot/js/site.js",
       "PackagePath": "staticwebassets/js/site.js"
     },

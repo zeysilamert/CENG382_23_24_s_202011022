@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "eBDfUn+L8utmHT0NllPIqPITIGwnpSX7XFLfvKr8jeA=",
+  "Hash": "tZyW0vdgbP6FJplS8xDG5rkuNkat2RNg8p1floJ9l6c=",
   "Source": "RazorPagesMovie",
   "BasePath": "_content/RazorPagesMovie",
   "Mode": "Default",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/color-modes.js"
+    },
+    {
+      "Identity": "/Users/sila/Desktop/CENG382_23_24_s_202011022/RazorPagesMovie/wwwroot/js/script.js",
+      "SourceId": "RazorPagesMovie",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/sila/Desktop/CENG382_23_24_s_202011022/RazorPagesMovie/wwwroot/",
+      "BasePath": "_content/RazorPagesMovie",
+      "RelativePath": "js/script.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/script.js"
     },
     {
       "Identity": "/Users/sila/Desktop/CENG382_23_24_s_202011022/RazorPagesMovie/wwwroot/js/site.js",
