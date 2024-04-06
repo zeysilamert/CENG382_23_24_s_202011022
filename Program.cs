@@ -3,6 +3,30 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+public class States
+{
+    public string name { get; set; }
+    public int roomNumber { get; set; }
+    public string enteranceDate { get; set; }
+    public string exitDate { get; set; }
+
+    public States(string constName, int constRoomNumber, string constEnt, string constExit)
+    {
+        name = constName;
+        roomNumber = constRoomNumber;
+        enteranceDate = constEnt;
+        exitDate = constExit;
+    }
+
+    public void displayProperty()
+    {
+        Console.WriteLine($"Name: {name}");
+        Console.WriteLine($"Room Number: {roomNumber}");
+        Console.WriteLine($"Enterance Day: {enteranceDate}");
+        Console.WriteLine($"Exit Day: {exitDate}\n");
+    }
+}
+
 public class RoomData
 {
     [JsonPropertyName("Room")]
@@ -42,7 +66,6 @@ public class ReservationHandler
 
     public void AddReservation(Reservation reservation)
     {
-
         int startIndex = reservation.Date.Day - 1;
         int numberOfDays = reservation.Time.Day - startIndex;
         int roomIndex = int.Parse(reservation.Room.RoomId) - 1;
@@ -112,6 +135,12 @@ class Program
 
         try
         {
+            States state1 = new States("Mert", 1, "07/10/2024", "07/14/2024");
+            States state2 = new States("Sila", 2, "10/9/2024", "10/15/2024");
+            States state3 = new States("Zeynep", 3, "8/8/2024", "8/18/2024");
+            States state4 = new States("Isinsu", 4, "01/01/2024", "01/07/2024");
+            States selectedState = null;
+
             string jsonString = File.ReadAllText(jsonFilePath);
 
             var options = new JsonSerializerOptions
@@ -126,10 +155,10 @@ class Program
             bool programOn = true;
             while (programOn)
             {
-                Console.WriteLine("Press 1 to add a new reservation.");
-                Console.WriteLine("Press 2 to delete reservation.");
-                Console.WriteLine("Press 3 to display weekly schedule.");
-                Console.WriteLine("Press 4 to exit.");
+                Console.WriteLine("To add a new reservation press 1.");
+                Console.WriteLine("To delete reservation press 2.");
+                Console.WriteLine("To display weekly schedule press 3.");
+                Console.WriteLine("To exit press 4.");
 
                 int selection = int.Parse(Console.ReadLine());
 
@@ -137,30 +166,51 @@ class Program
                 {
                     case 1:
 
-                        Console.WriteLine("All the Rooms:");
-                        for (int i = 0; i < roomData.Rooms.Length; i++)
+                        Console.WriteLine("State 1:");
+                        state1.displayProperty();
+                        Console.WriteLine("State 2:");
+                        state2.displayProperty();
+                        Console.WriteLine("State 3:");
+                        state3.displayProperty();
+                        Console.WriteLine("State 4:");
+                        state4.displayProperty();
+
+                        Console.WriteLine("Press 1 to state 1:");
+                        Console.WriteLine("Press 2 to state 2:");
+                        Console.WriteLine("Press 3 to state 3:");
+                        Console.WriteLine("Press 4 to state 4:");
+
+                        int selection2 = int.Parse(Console.ReadLine());
+
+                        switch (selection2)
                         {
-                            Console.WriteLine($"{i + 1}. {roomData.Rooms[i].RoomName}");
+                            case 1:
+                                selectedState = state1;
+                                break;
+                            case 2:
+                                selectedState = state2;
+                                break;
+                            case 3:
+                                selectedState = state3;
+                                break;
+                            case 4:
+                                selectedState = state4;
+                                break;
+                            default:
+                                Console.WriteLine("Invalid state.");
+                                break;
                         }
+                        
 
-                        Console.Write("Enter a reserver name: ");
-                        string reserverName = Console.ReadLine();
+                        string reserverName = selectedState.name;
 
-                        Console.Write("Enter room number: ");
-                        int roomIndex = int.Parse(Console.ReadLine()) - 1;
+                        int roomIndex = selectedState.roomNumber - 1;
 
-                        if (roomIndex < 0 || roomIndex >= roomData.Rooms.Length)
-                        {
-                            Console.WriteLine("Invalid room selection, please try again.");
-                            break;
-                        }
+                        DateTime date = DateTime.Parse(selectedState.enteranceDate);
 
-                        Console.Write("Enter entrance day (MM/DD/YYYY): ");
-                        DateTime date = DateTime.Parse(Console.ReadLine());
+                        DateTime time = DateTime.Parse(selectedState.exitDate);
 
-                        Console.Write("Enter exit day (MM/DD/YYYY): ");
-                        DateTime time = DateTime.Parse(Console.ReadLine());
-
+        
                         Reservation newReservation = new Reservation
                         {
                             Date = date,
@@ -186,11 +236,11 @@ class Program
 
                     case 4:
                         programOn = false;
-                        Console.WriteLine("Thank you for using.");
+                        Console.WriteLine("Thanks for choosing us!");
                         break;
                     default:
-                        Console.WriteLine("Invalid value, please try again.");
-                        break;
+                        Console.WriteLine("Invalid input, please try again. ");
+                        break;    
                 }
             }
         }
