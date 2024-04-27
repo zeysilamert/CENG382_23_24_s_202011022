@@ -35,6 +35,13 @@ class Program
     static void Main(string[] args)
     {
         string jsonFilePath = "Data.json";
+        string reservationDataFilePath = "ReservationData.Json";
+        string logFilePath = "LogData.Json";
+
+        ILogger fileLogger = new FileLogger(logFilePath);
+        LogHandler logHandler= new LogHandler(fileLogger);
+        ReservationRepository reservationRepository = new ReservationRepository(reservationDataFilePath, fileLogger);
+        RoomHandler roomHandler = new RoomHandler(jsonFilePath);
 
         try
         {
@@ -44,11 +51,10 @@ class Program
             States state4 = new States("Tuna", "003", "Friday", "11:00");
             States selectedState = null;
 
-            RoomHandler roomHandler = new RoomHandler(jsonFilePath);
             var roomData = roomHandler.GetRooms();
-
-            ReservationHandler handler = new ReservationHandler(roomData);
-
+            ReservationHandler handler = new ReservationHandler(roomData, reservationRepository, logHandler);
+            ReservationService reservationService= new ReservationService(handler);
+            
             bool programOn = true;
             while (programOn)
             {

@@ -1,9 +1,11 @@
 public class ReservationHandler
 {
+    private IReservationRepository reservationRepository;
+    private LogHandler logHandler;
     private Dictionary<string, Dictionary<Room, List<(DateTime, string)>>> weeklyReservations;
     private TimeSpan breakTime = TimeSpan.FromMinutes(40);
 
-    public ReservationHandler(RoomData roomData)
+    public ReservationHandler(RoomData roomData, ReservationRepository reservationRepository, LogHandler logHandler)
     {
         weeklyReservations = new Dictionary<string, Dictionary<Room, List<(DateTime, string)>>>();
 
@@ -20,12 +22,15 @@ public class ReservationHandler
                 weeklyReservations[day.ToString()][room] = new List<(DateTime, string)>();
             }
         }
+        this.reservationRepository = reservationRepository;
+        this.logHandler = logHandler;
     }
 
     public void AddReservation(string day, string roomNumber, string reserverName, DateTime enterTime)
     {
         Room room = Array.Find(weeklyReservations[day].Keys.ToArray(), r => r.RoomId == roomNumber);
         List<(DateTime, string)> reservations = weeklyReservations[day][room];
+        Reservation reservation;
 
         DateTime endTime = enterTime.AddMinutes(40); 
 
@@ -36,8 +41,14 @@ public class ReservationHandler
         }
 
         reservations.Add((enterTime, reserverName));
+        //reservation = new Reservation(day, endTime, room, reserverName);
         Console.WriteLine($"Reservation added for room {roomNumber} on {day} at {enterTime:hh:mm tt}.");
+        //reservationRepository.AddReservation(reservation);
+        var log = new LogRecord(endTime, day, reserverName, roomNumber, $"Added Reservation: {roomNumber}");
+        logHandler.AddLog(log);
+        
     }
+
 
     public void DeleteReservationByName(string reserverName)
     {

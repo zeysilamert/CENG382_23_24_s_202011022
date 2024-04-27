@@ -14,17 +14,7 @@ public class FileLogger : ILogger
 
     public void Log(LogRecord log)
     {
-        var logs = new List<LogRecord>();
-
-        if (File.Exists(logFilePath))
-        {
-            var jsonString = File.ReadAllText(logFilePath);
-            logs = JsonSerializer.Deserialize<List<LogRecord>>(jsonString) ?? new List<LogRecord>();
-        }
-
-        logs.Add(log);
-
-        var updatedJsonString = JsonSerializer.Serialize(logs, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(logFilePath, updatedJsonString);
+        var logJson = JsonSerializer.Serialize(log, new JsonSerializerOptions {WriteIndented = true});
+        File.AppendAllText(logFilePath, logJson + "\n");
     }
 }

@@ -1,5 +1,5 @@
 public record Reservation(
-    DateTime Date,
+    string Date,
     DateTime Time,
     Room Room,
     string ReserverName
