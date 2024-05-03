@@ -24,10 +24,9 @@ public class States
     {
         Console.WriteLine($"Name: {name}");
         Console.WriteLine($"Room Number: {roomNumber}");
-        Console.WriteLine($"Enterance Day: {enterDay}");
-        Console.WriteLine($"Enterance Time: {enterHour}\n");
+        Console.WriteLine($"Entrance Day: {enterDay}");
+        Console.WriteLine($"Entrance Time: {enterHour}\n");
     }
-
 }
 
 class Program
@@ -35,26 +34,29 @@ class Program
     static void Main(string[] args)
     {
         string jsonFilePath = "Data.json";
-        string reservationDataFilePath = "ReservationData.Json";
         string logFilePath = "LogData.Json";
 
-        ILogger fileLogger = new FileLogger(logFilePath);
-        LogHandler logHandler= new LogHandler(fileLogger);
-        ReservationRepository reservationRepository = new ReservationRepository(reservationDataFilePath, fileLogger);
+        ILogger logFile = new FileLogger(logFilePath);
+        LogHandler logHandler= new LogHandler(logFile);
+        IReservationRepository reservationRepository = new ReservationRepository();
         RoomHandler roomHandler = new RoomHandler(jsonFilePath);
 
         try
         {
-            States state1 = new States("Mert", "001", "Monday", "11:00");
-            States state2 = new States("Sila", "001", "Monday", "11:20");
-            States state3 = new States("Zeynep", "002", "Monday", "11:20");
-            States state4 = new States("Tuna", "003", "Friday", "11:00");
-            States selectedState = null;
+
+            Dictionary<string, States> statesDictionary = new Dictionary<string, States>
+            {
+                {"Zeynep", new States("Zeynep", "002", "Monday", "11:20")},
+                {"Sila", new States("Sila", "001", "Monday", "11:20")},
+                {"Mert", new States("Mert", "001", "Monday", "11:00")},
+                {"Isinsu", new States("Isinsu", "003", "Tuesday", "10:00")},
+                {"Tuna", new States("Tuna", "003", "Friday", "11:00")}
+            };
 
             var roomData = roomHandler.GetRooms();
             ReservationHandler handler = new ReservationHandler(roomData, reservationRepository, logHandler);
-            ReservationService reservationService= new ReservationService(handler);
-            
+            ReservationService reservationService= new ReservationService(handler, reservationRepository);
+
             bool programOn = true;
             while (programOn)
             {
@@ -68,50 +70,42 @@ class Program
                 switch (selection)
                 {
                     case 1:
-
-                        Console.WriteLine("Select state 1:");
-                        state1.displayProperty();
-                        Console.WriteLine("Select state 2:");
-                        state2.displayProperty();
-                        Console.WriteLine("Select state 3:");
-                        state3.displayProperty();
-                        Console.WriteLine("Select state 4:");
-                        state4.displayProperty();
-
-                        int selection2 = int.Parse(Console.ReadLine());
-
-                        switch (selection2)
+                        int index = 1;
+                        foreach (var state in statesDictionary)
                         {
-                            case 1:
-                                selectedState = state1;
-                                break;
-                            case 2:
-                                selectedState = state2;
-                                break;
-                            case 3:
-                                selectedState = state3;
-                                break;
-                            case 4:
-                                selectedState = state4;
-                                break;
-                            default:
-                                Console.WriteLine("Invalid input !!");
-                                break;
+                            Console.WriteLine($"Select state {index}:");
+                            state.Value.displayProperty();
+                            index++;
                         }
 
+                        Console.WriteLine("Enter the number of the state to select:");
+                        if (int.TryParse(Console.ReadLine(), out int stateSelection) && stateSelection > 0 && stateSelection <= statesDictionary.Count)
+                        {
+                            States selectedState = statesDictionary.ElementAt(stateSelection - 1).Value;
 
-                        string reserverName = selectedState.name;
-                        string roomNumber = selectedState.roomNumber;
-                        string day = selectedState.enterDay;
-                        DateTime time = DateTime.Parse(selectedState.enterHour);
+                            string reserverName = selectedState.name;
+                            string roomNumber = selectedState.roomNumber;
+                            string day = selectedState.enterDay;
+                            DateTime time = DateTime.Parse(selectedState.enterHour);
 
-                        handler.AddReservation(day, roomNumber, reserverName, time);
+                            handler.AddReservation(day, roomNumber, reserverName, time);
+                        }
+
                         break;
 
                     case 2:
                         Console.Write("\nEnter guest name to delete all reservations: ");
                         string reserverNameToDelete = Console.ReadLine();
-                        handler.DeleteReservationByName(reserverNameToDelete);
+
+                        if (statesDictionary.TryGetValue(reserverNameToDelete, out States providedState))
+                        {   
+                            string reserverName = providedState.name;
+                            string roomNumber = providedState.roomNumber;
+                            string day = providedState.enterDay;
+                            DateTime time = DateTime.Parse(providedState.enterHour);
+                            handler.DeleteReservationByName(reserverNameToDelete, roomNumber, day, time);
+                        }
+
                         break;
 
                     case 3:
@@ -120,10 +114,10 @@ class Program
 
                     case 4:
                         programOn = false;
-                        Console.WriteLine("Thanks for using.");
+                        Console.WriteLine("\nThank you for using us!");
                         break;
                     default:
-                        Console.WriteLine("Wrong input !!");
+                        Console.WriteLine("Invalid input, please try again.");
                         break;
                 }
             }

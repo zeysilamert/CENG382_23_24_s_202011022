@@ -1,1 +1,23 @@
-{}
+[
+  {
+    "timestamp": "2024-05-03T11:20:00",
+    "dayName": "Monday",
+    "ReserverName": "Zeynep",
+    "RoomName": "002",
+    "action": "Added"
+  },
+  {
+    "timestamp": "2024-05-03T11:00:00",
+    "dayName": "Friday",
+    "ReserverName": "Tuna",
+    "RoomName": "003",
+    "action": "Added"
+  },
+  {
+    "timestamp": "2024-05-03T11:20:00",
+    "dayName": "Monday",
+    "ReserverName": "Sila",
+    "RoomName": "001",
+    "action": "Added"
+  }
+]

@@ -1,25 +1,16 @@
-using System;
+using System.Security.Cryptography;
 
 public class LogHandler
 {
-    private readonly ILogger logger;
-
-    public LogHandler(ILogger logger)
+    private readonly ILogger _logger;
+    
+    public LogHandler(ILogger logger) // Dependency Injection principle
     {
-        if (logger == null)
-        {
-            throw new ArgumentNullException(nameof(logger), "Logger cannot be null");
-        }
-        this.logger = logger;
+        _logger = logger;
     }
 
     public void AddLog(LogRecord log)
     {
-        if (log == null)
-        {
-            throw new ArgumentNullException(nameof(log), "LogRecord cannot be null");
-        }
-
-        logger.Log(log); // This sends the log to the provided ILogger implementation
+        _logger.Log(log);
     }
 }
