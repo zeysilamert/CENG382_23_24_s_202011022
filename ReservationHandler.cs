@@ -98,33 +98,4 @@ private void UpdateReservationDataFile(List<Reservation> reservations = null)
         Console.WriteLine($"\nReservations made by {reserverName} have been removed.\n");
     }
 
-    public void PrintWeeklySchedule()
-    {
-        Console.WriteLine("Weekly Schedule:");
-        
-        for (int i = 0; i < 7; i++)
-        {
-            DayOfWeek dayOfWeek = (DayOfWeek)(((int)DayOfWeek.Monday + i) % 7);
-            string dayOfWeekString = dayOfWeek.ToString();
-            Console.WriteLine($"Day: {dayOfWeekString}");
-
-            foreach (var roomKvp in weeklyReservations[dayOfWeekString])
-            {
-                Room room = roomKvp.Key;
-                List<(DateTime, string)> reservations = roomKvp.Value;
-
-                if (reservations.Count == 0)
-                {
-                    continue;
-                }
-
-                Console.WriteLine($"Room {room.RoomId} ({room.RoomName}):");
-                foreach ((DateTime time, string reserverName) in reservations)
-                {
-                    Console.WriteLine($"  {time:hh:mm tt} - {reserverName}");
-                }
-            }
-            Console.WriteLine();
-        }
-    }
 }
