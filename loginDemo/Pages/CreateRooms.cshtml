@@ -1,0 +1,80 @@
+﻿@page
+@model MyApp.Namespace.CreateRoomsModel
+@{
+    ViewData["Title"] = "Create Rooms";
+}
+
+<style>
+    h1  {
+        text-align: center;
+    }
+    body {
+        background-color: rgb(188, 212, 235);
+    }
+    form {
+        width: 300px;
+        margin: 0 auto;
+        border: 2px solid rgba(255, 255, 255, 0.521);
+        padding: 20px;
+        border-radius: 5px;
+        background: rgb(255, 255, 255);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    button[type="submit"] {
+        margin-top: 10px;
+        display: block; 
+        margin: 0 auto;
+        background-color: rgb(140, 140, 248);
+        border: none;
+    }
+
+    a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+</style>
+
+<h1>Create Room</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="NewRoom.RoomName"></label>
+        <input asp-for="NewRoom.RoomName" class="form-control" />
+        <span asp-validation-for="NewRoom.RoomName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NewRoom.Capacity"></label>
+        <input asp-for="NewRoom.Capacity" class="form-control" type = "number" min = "1" />
+        <span asp-validation-for="NewRoom.Capacity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-info">Create</button>
+</form>
+
+
+<a asp-page="/DisplayRooms">Display Rooms</a>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
