@@ -1,0 +1,130 @@
+﻿@page
+@model MyApp.Namespace.DisplayReservationModel
+@{
+    ViewData["Title"] = "Display Reservation";
+}
+
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    body {
+        background-color: rgb(188, 212, 235);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #btn-id{
+        margin: 10px 0px;
+    }
+
+    #addRoomForm {
+        margin-bottom: 0;
+    }
+
+    .card-header button {
+        margin-bottom: 0;
+    }
+
+    button[type="submit"] {
+        margin-top: 10px;
+        display: block;
+        background-color: rgb(140, 140, 248);
+        border: none;
+    }
+
+    .icon-group {
+        color: rgb(101, 101, 173);
+        display: inline-block;
+        margin-left: 8px;
+    }
+
+    .links {
+        text-decoration: none;
+    }
+
+    .btn {
+        background-color: rgb(140, 140, 248);
+        border: none;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<h1>Reservations</h1>
+
+<form method="get">
+    <div class="filter-group">
+        <label for="">Room Name</label>
+        <div class="input-group">
+            <input type="text" name="roomName" placeholder="Filter by room name"
+                value="@Model.Request.Query["roomName"]" />
+        </div>
+    </div>
+    <div class="filter-group">
+        <label for="">Date</label>
+        <div class="input-group">
+            <input type="date" name="startDate" placeholder="Start Date" />
+        </div>
+    </div>
+    <div class="filter-group">
+        <label for="">Capacity</label>
+        <div class="input-group">
+            <input type="number" name="capacity" placeholder="Minimum capacity" type="number" min="1" />
+        </div>
+    </div>
+    <button type="submit" class="btn" id = "btn-id">Filter</button>
+</form>
+@if (Model.Reservations != null && Model.Reservations.Any())
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Create Reservation
+            <form id="addRoomForm" method="get" action="/CreateReservation">
+                <button type="submit" class="btn btn-sm btn-primary">Create Reservation</button>
+            </form>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Date and Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reservation in Model.Reservations)
+                    {
+                        <tr>
+                            <td>@reservation.Room?.RoomName</td>
+                            <td>@reservation.DateTime.ToString("g")</td>
+                            <td>
+                                <a class="links" href="/EditReservation?id=@reservation.Id">
+                                    <div class="icon-group">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </div>
+                                </a>
+                                <a class="links" href="/DeleteReservation?id=@reservation.Id">
+                                    <div class="icon-group">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <p>No reservations available.</p>
+}
