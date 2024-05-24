@@ -20,10 +20,17 @@ namespace MyApp.Namespace
         }
 
         public IList<Reservation> Reservations { get; set; }
+        public DateTime startOfWeek { get; set; }
 
         public void OnGet(string roomName, DateTime? startDate, int? capacity)
         {
-            var query = _context.Reservations.Include(r => r.Room).AsQueryable();  // Include Room data
+             var today = DateTime.Today;
+            int currentDayOfWeek = (int)today.DayOfWeek;
+            int daysUntilMonday = (currentDayOfWeek - (int)DayOfWeek.Monday + 7) % 7;
+            startOfWeek = today.AddDays(-daysUntilMonday);
+            DateTime endOfWeek = startOfWeek.AddDays(7);
+
+            var query = _context.Reservations.Include(r => r.Room).AsQueryable(); 
 
             if (!string.IsNullOrEmpty(roomName))
             {
@@ -43,5 +50,20 @@ namespace MyApp.Namespace
 
             Reservations = query.ToList();
         }
+
+        public IActionResult OnPostDelete(int reservationId)
+        {
+            var reservation = _context.Reservations.Find(reservationId);
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            _context.Reservations.Remove(reservation);
+            _context.SaveChanges();
+
+            return RedirectToPage();
+        }
+
     }
 }

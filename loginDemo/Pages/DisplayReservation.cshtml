@@ -13,6 +13,14 @@
         background-color: rgb(188, 212, 235);
     }
 
+    .customized-tbl {
+        border-collapse: collapse;
+    }
+
+    .customized-tbl th, .customized-tbl td {
+        border: 1px solid #dee2e6;
+    }
+
     .card-header {
         display: flex;
         justify-content: space-between;
@@ -34,7 +42,6 @@
     button[type="submit"] {
         margin-top: 10px;
         display: block;
-        background-color: rgb(140, 140, 248);
         border: none;
     }
 
@@ -42,10 +49,21 @@
         color: rgb(101, 101, 173);
         display: inline-block;
         margin-left: 8px;
+        background-color: white;
     }
 
     .links {
         text-decoration: none;
+        border: none;
+        background-color: white;
+        padding: 0;
+    }
+
+    .res-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
     .btn {
@@ -85,38 +103,52 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Create Reservation
+            Reservations Weekly Schedule
             <form id="addRoomForm" method="get" action="/CreateReservation">
                 <button type="submit" class="btn btn-sm btn-primary">Create Reservation</button>
             </form>
         </div>
         <div class="card-body">
-            <table class="table">
+            <table class="table customized-tbl">
                 <thead>
-                    <tr>
-                        <th>Room</th>
-                        <th>Date and Time</th>
-                        <th>Actions</th>
-                    </tr>
+                    <th>Time</th>
+                    @for (var day = 0; day < 7; day++)
+                    {
+                        <th>@Model.startOfWeek.AddDays(day).ToString("ddd (M/d)")</th>
+                    }
                 </thead>
                 <tbody>
-                    @foreach (var reservation in Model.Reservations)
+                    @for (int hour = 0; hour < 24; hour++)
                     {
                         <tr>
-                            <td>@reservation.Room?.RoomName</td>
-                            <td>@reservation.DateTime.ToString("g")</td>
-                            <td>
-                                <a class="links" href="/EditReservation?id=@reservation.Id">
-                                    <div class="icon-group">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </div>
-                                </a>
-                                <a class="links" href="/DeleteReservation?id=@reservation.Id">
-                                    <div class="icon-group">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </div>
-                                </a>
-                            </td>
+                            <td>@hour:00</td>
+                            @for (int day = 0; day < 7; day++)
+                            {
+                                <td>
+                                    @{
+                                        @foreach (var reservation in Model.Reservations.Where(r => r.DateTime.Hour == hour && r.DateTime.Date == Model.startOfWeek.AddDays(day).Date))
+                                        {
+                                            <div class="res-info">
+                                                <div>@reservation.Room.RoomName</div>
+                                                <div class="link-group">
+                                                    <a class="links" href="/EditReservation?id=@reservation.Id">
+                                                        <div class="icon-group">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </div>
+                                                    </a>
+                                                    <form method="post" asp-page-handler="Delete" asp-route-reservationId="@reservation.Id" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                                                        <button type="submit" class="links" id="delete-button">
+                                                            <div class="icon-group">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </div>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>
