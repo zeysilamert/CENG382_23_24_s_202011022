@@ -1,0 +1,101 @@
+﻿@page "{id:int}"
+@model MyApp.Namespace.EditReservationModel
+@{
+    ViewData["Title"] = "Edit Reservation";
+}
+
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    body {
+        background-color: rgb(188, 212, 235);
+    }
+
+    form {
+        width: 300px;
+        margin: 0 auto;
+        border: 2px solid rgba(255, 255, 255, 0.521);
+        padding: 20px;
+        border-radius: 5px;
+        background: rgb(255, 255, 255);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    button[type="submit"] {
+        margin-top: 10px;
+        display: block;
+        margin: 0 auto;
+        background-color: rgb(140, 140, 248);
+        border: none;
+    }
+
+    a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<h1>Edit Reservation</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Reservation.Id" />
+    <div class="form-group">
+        <div class="form-group">
+            <label asp-for="Reservation.DateTime">Date and Time:</label>
+            <input asp-for="Reservation.DateTime" id="dateTime" type="text" class="form-control" required
+                value="@Model.Reservation.DateTime.ToString("yyyy-MM-dd HH:mm")" />
+            <span asp-validation-for="Reservation.DateTime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="room">Room:</label>
+            <div class="select">
+                <select asp-for="Reservation.RoomId" asp-items="Model.Rooms">
+                    required>
+                    <option value="">Select a room</option>
+                </select>
+            </div>
+            <span asp-validation-for="Reservation.RoomId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn" id="edit-btn">Save</button>
+</form>
+
+<a asp-page="./DisplayReservation">Back to List</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("#dateTime", {
+                enableTime: true,
+                noCalendar: false,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                minuteIncrement: 60,
+                time_24hr: true,
+                defaultDate: "@Model.Reservation.DateTime.ToString("yyyy-MM-dd HH:mm")" // Set default date to the model's DateTime value
+            });
+        });
+    </script>
+}

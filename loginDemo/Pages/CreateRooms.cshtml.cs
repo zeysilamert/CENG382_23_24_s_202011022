@@ -30,8 +30,26 @@ namespace MyApp.Namespace
                 return Page();
             }
 
+            // Check for duplicate room name
+            if (_context.Rooms.Any(r => r.RoomName == NewRoom.RoomName))
+            {
+                ModelState.AddModelError("NewRoom.RoomName", "A room with this name already exists.");
+                return Page();
+            }
+
             _context.Rooms.Add(NewRoom);
             _context.SaveChanges();
+
+            var log = new RoomReservationLog
+            {
+                Timestamp = DateTime.Now,
+                RoomId = NewRoom.Id,
+                UserId = User.Identity.Name
+            };
+
+            _context.RoomReservationLogs.Add(log);
+            _context.SaveChanges();
+
             return RedirectToPage("/DisplayRooms");
         }
     }

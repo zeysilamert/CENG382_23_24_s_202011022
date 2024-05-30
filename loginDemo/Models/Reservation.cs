@@ -14,4 +14,5 @@ public partial class Reservation
     public string? ReservedBy { get; set; }
 
     public virtual Room? Room { get; set; }
+    public bool IsDeleted {get; set;}
 }
